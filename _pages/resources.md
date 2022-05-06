@@ -4,6 +4,10 @@ title: Resources
 permalink: /resources/
 ---
 
-## Resources page...
-Put whatever you want here...
-Or remove this page.
+## RSS
+
+The generated [RSS feed](https://en.wikipedia.org/wiki/RSS) of this blog can be found [here](../feed).
+
+## Sitemap
+
+The generated sitemap of this blog can be found [here](../sitemap).

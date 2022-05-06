@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Invest your time
+categories: []
+excerpt: 
 ---
 
 In the past 18 months after graduation, I’ve often felt this sense of regret / remorse over how I’ve used my time. It was really hard to put my finger on it, until recently.

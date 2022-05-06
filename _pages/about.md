@@ -18,7 +18,7 @@ I chess, code, and math with varying degrees of proficiency. I occasionally swim
 
 I suffer from what I imagine is a classic problem for a coder who also fancies himself a writer from time to time. Namely, I have 3 other blogs:
 
-- blog on some things I've been learning in the Bible: [https://jiangts.github.io/bible-reflections/](https://jiangts.github.io/bible-reflections/)
-- blog on coding things I find fun: [https://jiangts.github.io/dev-blog/](https://jiangts.github.io/dev-blog/)
-- legacy blog during my early college days: [https://jiangts.github.io/blog/](https://jiangts.github.io/blog/)
+- blog on some things I've been learning in the Bible: [Bible Reflections](https://jiangts.github.io/bible-reflections/)
+- blog on coding things I find fun: [Dev Blog](https://jiangts.github.io/dev-blog/)
+- legacy blog during my early college days: [Legacy blog](https://jiangts.github.io/blog/)
 

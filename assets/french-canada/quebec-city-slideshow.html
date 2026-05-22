@@ -152,6 +152,7 @@
       .title-slide,
       .place-slide,
       .theme-slide {
+        box-sizing: border-box;
         min-height: 100vh;
         height: 100vh;
         border-radius: 6px;
@@ -429,14 +430,24 @@
         </div>
       </section>`);
 
-    Reveal.initialize({
+    const compactLandscapeQuery = window.matchMedia("(orientation: landscape) and (max-height: 520px)");
+    const compactLandscapeConfig = { width: "100%", height: "100%", margin: 0 };
+    const desktopConfig = { width: 960, height: 700, margin: 0.04 };
+    const revealConfig = {
       hash: true,
       slideNumber: "c/t",
       transition: "fade",
-      backgroundTransition: "fade",
-      width: "100%",
-      height: "100%",
-      margin: 0
+      backgroundTransition: "fade"
+    };
+
+    Reveal.initialize({
+      ...revealConfig,
+      ...(compactLandscapeQuery.matches ? compactLandscapeConfig : {})
+    });
+
+    compactLandscapeQuery.addEventListener("change", event => {
+      Reveal.configure(event.matches ? compactLandscapeConfig : desktopConfig);
+      Reveal.layout();
     });
   </script>
 </body>

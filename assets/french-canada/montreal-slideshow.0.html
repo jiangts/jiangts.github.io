@@ -1,0 +1,388 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Montreal Trip Slideshow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+  <style>
+    :root {
+      --ink: #f6f7ef;
+      --muted: #c7d2d9;
+      --line: rgba(255,255,255,.18);
+      --accent: #f0c04f;
+      --blue: #62c2d3;
+      --green: #91c96d;
+      --red: #ee7668;
+    }
+    body { background: #101417; }
+    .reveal { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); }
+    .reveal .slides { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 { letter-spacing: 0; text-transform: none; line-height: 1.02; }
+    .reveal h1 { font-size: 1.75em; max-width: 900px; }
+    .reveal h2 { font-size: .64em; margin: 0; }
+    .reveal p, .reveal li { font-size: .36em; line-height: 1.35; }
+    .title-slide {
+      min-height: 72vh;
+      display: grid;
+      align-content: end;
+      padding: 0 5vw 5vh;
+      background: var(--hero) center / cover;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .title-slide .deck-label { color: var(--accent); font-weight: 800; font-size: .3em; text-transform: uppercase; letter-spacing: .12em; }
+    .title-slide .sub { max-width: 790px; color: var(--muted); }
+    .title-copy {
+      width: fit-content;
+      max-width: 860px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.38);
+    }
+    .place-slide {
+      position: relative;
+      min-height: 72vh;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #151b1f;
+    }
+    .photo-stack {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1.35fr .8fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 6px;
+    }
+    .photo-stack img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #263036;
+      filter: saturate(1.05) contrast(1.02);
+    }
+    .photo-stack img:first-child { grid-row: 1 / -1; }
+    .text-panel {
+      position: absolute;
+      left: 34px;
+      bottom: 34px;
+      z-index: 2;
+      display: grid;
+      align-content: end;
+      width: min(48%, 520px);
+      padding: 9px 11px;
+      background: rgba(0,0,0,.36);
+      border-radius: 8px;
+    }
+    .pitch {
+      margin: 0;
+      max-width: 500px;
+      color: var(--ink);
+      font-size: .43em;
+      font-weight: 750;
+      line-height: 1.18;
+    }
+    .text-panel .pitch { margin-top: 9px; }
+    .theme-slide {
+      min-height: 72vh;
+      display: grid;
+      align-content: end;
+      padding: 0 5vw 5vh;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--hero) center / cover;
+    }
+    .theme-slide .deck-label {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: .3em;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+    .theme-slide .theme-copy {
+      width: min(860px, 86vw);
+      padding: 7px 9px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.34);
+    }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+      max-width: 900px;
+    }
+    .lens {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      color: var(--muted);
+      font-size: .32em;
+      line-height: 1.28;
+    }
+    .lens strong { color: var(--ink); }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 26px;
+    }
+    .summary div { border-top: 1px solid var(--line); padding-top: 15px; }
+    @media (max-width: 820px) {
+      .place-slide { min-height: 76vh; }
+      .photo-stack { grid-template-columns: 1fr; opacity: .78; }
+      .photo-stack img:first-child { grid-row: auto; }
+      .photo-stack img:nth-child(n+2) { display: none; }
+      .text-panel {
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+        width: auto;
+        padding: 8px 10px;
+      }
+      .theme-grid { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides" id="slides"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    const photo = {
+      "old": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNz-cDVer38y1rbw50D2GQip-0SOIGyrUXwH8ft3BldM9qrx4UIE8Q5AJDdUz1MSbMAwVYLWUUnTihluYcA0icG4Tg2RuxoH3QzKTQQ2Gvp3cGfmMCEYMgoogMPV40Qnfg8n25tUMWogasTv24=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOqDeNaQNXFDkN0WnPrgO8FRD_ygXBamSWMH1QmElYPUjgA7gQrvERxnqYNSZImXnSI1zmC5g9Dbna0oYpcVYq10gREvm6BTD8pKDDW3IQR343LjrWEaVtX-HHowLEbUvjfhyDXYOL2Kjzxc_I=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMz8lHk5L4EuDugbhBgApzq9wtI1QV1sCe2cZ308wYrD3jGklifEeoURq9sDx1x7PCpt8Gx6_ssoTDCG8SXpsa8FxDm1n_0i-ZrgGIpvjzXR6sYMnltpI6GVtEs2HY7VcUemUOzmos_Hdopnw=s4800-w900"
+      ],
+      "basilica": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPkhTXFjNw9uVQXOkFH2Vu9Z948DEdioK1_VdUCOZPsgQsCRHLxCaJTnrH67Go4VJDXQgAZOCt9cvnfwd9xjrpw7vOshQtR6GZ1WoK1XHCxoBt1ed-qEZjWaUzDoRJ8PxA1Tq7Bml-lkj_sQYuomSq1Vg=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOYmIsBGMcPre5FDDfJoYOKPbya4sdrCZIRTGNgHkP7WeURcFRsBt963wzTQ2liPs6JPI9LnO9esDKqz_WZyp0QzsWC7ICUL9Q8Xnl7tURtwIoW_2_Q7QOgQBiLRrQWhi-9DkUszuM1-_5Nag=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNBzhIc5uW7DmG33Bg0ul8p3Gmf8x8hQR3rGBebPAC3cPHWCNSvqWL7lq6a6J1Q53RdEGrels4yattzOA_Sa4PINNVHT6uPpmkGbGN2_7YQKsk2j5ddKbuisqq-ADwLwg_Ez0YmvSY8uEWSZY0=s4800-w1600"
+      ],
+      "port": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOAPGlxrRNc4zghpf-1DLhTQVUVtT-mv_qdX7KZC1vbuTkmxFFE1wr59CK2Rf2bInCD_Hvs9ODzLogR3UpgbTx7Cz9gg-KNCfmS8o5CWlkAmJ8bQJLm_qqUW6pcbXgxcYU96tGMqoD5-KqZHg=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMNG6qwXwF3FH_GzTp2l3GwKXuIsuz_tP2DfJ4Y3qn319uFL1KNkZ58Nqpd3GjML7VQLSDik8P7mfIHykSslL3ZdDqDCUD3UrxfOF8dwzhjr7BwAzoyT1EpKNhfEt5ZWzyC9bkpuPoxV7uD6g=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNr547KXoICz9KG3pEKGiF5C9SUxuDr5eqalgLRrB7UMZ-C2BzLdMLSoxQO1JyjVCwQA9A3aQ4KaEOrpHMruh3ZxlFx5cYJ91fK0-DW9KHMjP9ayLbBfZtAOWxWgfb5JsJtj33DO8MoVqokAg=s4800-w1600"
+      ],
+      "pointe": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMSL-Oy0ptTRDzxnIyyKm5WBqs96pNthb2idwJkDWwqo_CJjAlbkbozkNk2Wr_khYP5ezwN5AT5T57oUK5O_sbzfZJHCbFixxmKGw6fUoQ7OtGFHOYd3er06wN-WpLTqEjcD-ZtneGAq_Gk=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNIX9yN9WjX_O5SwqmfyNwXaD5FS5rZVWcak4Muw-HlVx0EjHS7vgXWhz75MRClCbnDjVYstnK2Q9pg8eQtL5lOP-u3vGAETTuCRpT6yCVxmsDPGRxnOGcNxqaIaTFYwepfhjh7ZJGDAN61GzB-gMCb=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOzx9H6plt2g_5J2il-d1_ggclkZuAw7iN2w8dO4ZiKE00w1oi0uS2d8udmIG0r9Evj6Ea-cA4F8vegT3NPuz8zr2ZiGULIZY5KiGg8M69pLp68sF6sFDaIo5Pl1d8DsTtqSaonYePxQWNnNA=s4800-w1200"
+      ],
+      "plateau": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZO3Rh0nr6GW9CvcAX2G_QmjjDbPu4upRyefrbQ2jGtJ3OudtQwbwTRXoGTtfxMbh0L57TrdmZwlTwpltaV4Bmr5KJktVHHnb4OirMTD_jxUgWjfiCqhFNx48930r2-ubs3jAFqmBrz3VNyhZA=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMuDuMrwulvKTQvaUD9eI3-NlJQmrEbJtt5lil_Zg3Bd6JkBWoYRDvRDAkGJoaD_coxW0DKTYJ3b__QlE9E01F5AxO7y4sakhPijgXQR7k9FMN-KumgF1Efwul4OZVB9YEyLsoVKevofC4LJtM=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPqjKG6WPvzRfdoVuOwPXS8UZJkzUouomzsnwx85rQOk77HQ_PFhys0jQ48dWopIFNKH3OLEJUIDWAfOpyu02fGSun46Je1u65gWcXESwn93FFYkgEeWPh843P0ikYJoN0rV2FqWwNQVHIqIw=s4800-w1600"
+      ],
+      "mile": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNWpbYFsejJI_yYmr3QnNpmrzLZpyxHX3_EI5FN8G6bTHTB8Xq_g-RiagjqmjOhWe16qIxCMeZfevrfEYEYzwqxuHdjDK1MJc6GKMJ1QlP77Fow_15t-_YpZdfUi2HuppJ_CWbY_azX520PWQ=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZND90a3WwRsTXnROVtZn0G8ImliLNjSYrgD9Cd-dM0svvAhwe7b4TTW6hhpeAmqWCUKOyEbM6hjQ3jllIgvd6eK15K3cZUSFJo7wT1KmhPO10HYrBemC9slrlF0BRkyJ6EXgCJmDg2kFKU_4Uo=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMd9wceEaUktwytETTpHtUO7QAghwGg8VXiNAq9RKVILpxeZvFpND_Me9hUT1nOUPqZMEd6DX9fV1FrFqp8SNATc_PaD2fvEwmhC9F29Nt-0OOHY4LOVr0k50950q3LqBErDe__tLGfp5Pc2w=s4800-w1600"
+      ],
+      "bagel": [
+            "https://lh3.googleusercontent.com/places/ANXAkqFMx8ovlPuTGOCf91x8UT0hSHyxYjAa8aLUn6q2WatjluJWZ0WAfHnZfDy7J_UcYIcDNXZ5djfIPyN5ZpCkyOHHjr1NS4BihHc=s4800-w646",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZN8-pLS2abdq0MtQBVpAf-6SXvU94M2ijhP9t4lulU576D_7-MnvHTXMEeAmUdEgQUuXlzM4JJwRae2Ht0gOtSn3PPk8wVtc3mh1HV2vZEngk_kCZ1qpUMkqEu3_MARVPCyLX42GBqhx1SHnTUHzGq6Lg=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMRSe4m_U9VdHpl8mOto4cgJOrEH4omnrBH5mzRnXJGmBJgOHpCg4d3zUjwLuZwMLvWfZii6XXPktQIxqKcyyTQR6lpWUDvY4QxCmAzunfdFj9n-lrxfwMcnXp8f_aS6OLYs6DcnHJKUHtnVUZzvGQfHQ=s4800-w1600"
+      ],
+      "schwartz": [
+            "https://lh3.googleusercontent.com/places/ANXAkqFiBs4W0eAC0d5132Nzn_XSfXg3-zliLINIt-8LGAkkDwYs-ycWmjyKE6ASij916xYcT9PghCl8Oky16sQ-ZuWnNjH7OsNlQas=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZP-UUJaPsw_eQSHonAkDljiDl-rVzTF59i8qaKLxVuJXENuxPSIE5U6TPPev2VMa19_Zjb4bOTgSwC5c3n13pnHDLxDl1paSq7GeiPtz-LyJE1wM2WmmpS-lXj82XS4aZ-BnTdDVbJAmqxGU7INna0_Ew=s4800-w1600",
+            "https://lh3.googleusercontent.com/places/ANXAkqFUegCWsTEq19AY2V3xtbymKqvTqGAKfxvCmK6j6PfV_D9FKWGU7jUBuV_yUdscdWNhobAPN-TbYz4GIGvCcnI4r3j3Ka1NJd0=s4800-w1600"
+      ],
+      "market": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZM0CT4dlnG2p1zka9GhmQidHyvA6dragoB58BUp99qXpJtO-Gs3-lyLy0Uj_NQwbvpDLbsBuhxzM6ETGEbyopkXNawHOJAFPyQ1jcehNgcIuTMs7cY4MnASVbvQaink2P0zKPXPGkyQfqGrpMCt83GiAA=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMCIvBSsRf6fElnhDdXkLqbBXg_Q0zg4vxxxSDDP-LZFzWMhnqFdWz3ARrQ3d10Rf9mTgijR-8GtmkbxhrYEfO8A85b_m0moguF_iZQ47Y4YYYtm1ARyAPpupLJ0XlYgo5EI874Dx7kuD4uywLkDKgMOA=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMzkzyUmAkQAlrVLx9EvT7q7dND_ZolfzSz-T7U4h9GpJzS3JKj7aK3bMDtgUekRtyIzr1Eg9quINsI7m0wouHtVOJ4PJ5BKLCWeBa1kOSByXwKfOQARswgBSoQBX6I8xudsi2rwpL7TCfRGw=s4800-w1600"
+      ],
+      "oratory": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOZUSM1Bof43hXiFpLEk8TySR4DW0NeBkzOMxkBXnAPVYAWVXJatXHzu03t8IQhPdTrbEIZxI9NvjXIcggmAsssHqWKWl77pU_WivtKXj4Acjsi4iDQml2cYFTGmReJjXNnaxWZqGzwKh34tUk=s4800-w1080",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOfgfcddnT6Ksa7h21AO8cpQ3uvzMz1TblsskFnOT0Qr4FN2dOV4hbY9YS_Kf7pAiEq-wiNOF5jk34iPnwu9JW3iAcjD7ByZ9K6n2_XnwLZhqWxRaW3cdj7hD6fpRBSwV7sn2Dd466m2ywkyA=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPV6Qrwg6DCeCbwf6MkHj8G8zpewY3ayt14XkcrD3PJfuanYhL43sSatmVZ7AjhrPCComWFoQWH_yfV_nWB-OF8Q2IlIh2CQKitEhNk0lCmL6Aqbc_-mDzhVPOE_h4BhNY1k9fczAr2CvvgoA=s4800-w1600"
+      ],
+      "mount": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOnSPcVvty37TTx5JMm9SJ8HJhvQygQKcyTm00GQhSFM0KbR_wfbcuEh4PjRxZT8LgBjrbkWE389co-wEbpwYY9hshN_mMALllFFzYI2O3-ijwGaq6AJi8pBYP40zL33VlCNVHeO7OyG_IPG41PYxb8=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZM1K3gSfFChgWpefd5EY6FANyW7Fh1dW0ZRL09h7zc_ppmFt4x5ZnmSpIEqUgdS6wbjDFOkjJFPko05jgxpAyhJDsLVdRi6CuRSUbr8SHRxFn_S-101pGHIBtggeIabMhi3kRAd8GM7FQQsepc=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZP4qawerJirx8Pysu21dYBZxXMMQrN7OTPS4ji5muuFkm1CjaBHdCIqqDfrjeQjm4iZX1d4M3EsE9vbKp3MB6mOS1bZ6DylCyEjfRNspFB5dqN3tk-EGwjfxJcxJQcomepNY3EGO8tYF5bHzA=s4800-w1600"
+      ],
+      "arts": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZO8zGWsxJfO8alMzTzxIoziOVdL_qEm8LpT37E_uO_90h3bIcBsJX4-j4NHHPUPqpnLOI-QctN5HvqQ2-rWPHkrwDv3Pp2hjdNd7ZS7jyJi2kWeTGGuNeFfjT-WY6g8pLD3NbjPL0SGkMG2azusA4k7Jw=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPn_zDXxT2ksadIo2b4u-tdC7R-IUGRhBg9ic24qqO5AZe7IAFnqyeKlm1J9kfmU3d5RNPxmf91UIvgp2Nz7I1rTGUU8CdSICKWYoTCEoTFg-5ZLxIl87EvgFsqt_rs8TlLG6abMElVq6Af=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNHjkPCH19MOaOz1fvzBgUyw9Ybor1CEWJC4J0R1gWVyOFZHUbmc6cNxMP1vK6nG_TBca0T7Us_1ODptei-BwFmAZKcLlbImfamw6FcBNvTn6mqapLzWJ2FyKj7MbDMhgfHA2pe51sVD7CQ=s4800-w1600"
+      ],
+      "mcgill": [
+            "https://lh3.googleusercontent.com/places/ANXAkqFDDfXfpWztBrOHIzdxwYMFnUg8emOS1-lYYztZSqvThI7tg52NGZK3-cZLQaoYcBr3qlseiVLEhxDe_nqy6HesWjsZ-abB1ng=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZM5niGHJ05P_Fl7JwVY1ZUYz9MJJu62R275aE04ot7KuUfd0VCxGZePThDt8gKAxXHSj_ghML_m94-vXgDPJfkH6Xjh29ffvCoVUM3opXVfxMgFpFXaO329YfsUXR3h7QcSt1z7uiHeIp4lST0OlJQWew=s4800-w1080",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZO3hDuTOvCGyfo0wdG4VDdvsqPpKCAiv-MdxNW-IPxHQHF8i1CssaQyJiTxMMQZa11APUUXCTFfklpAvy8d2jd08zuj0Xsd9OkUCZ8AgNYinaP1vDW-BHzj1i0q-vQdjMPP7AVRwLWlAR0Zqcg=s4800-w1600"
+      ],
+      "bell": [
+            "https://lh3.googleusercontent.com/places/ANXAkqGnItdy7XEIBuy2OQemxDoSCXV3RWl8NYvQ25KfhdtJftP8Tn304-2yWW8HLFMUU6mbv1Zxnw33p_zrt0oJaZyOECjYjFNpPVQ=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOiodEaB3G3ITOH9f5UO0uDrY4dzpUNnsA97_pQQ5vCaSPXIO1avSXh8pLhjObDCH6uu_qFVxhxjENO3uWEwn537ISKD5pcssFtSGkzzsrHxnnzTq9vfdliqam6plpBjbDHB2bKZfXStcYG0w=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOba90eAiTXXr_OkOTqISEtcV74zX7tCbC1SazX0uol2wfHzYc5CIcJGQKFICNmKfaORAQCVNEfwjgHYK1_GsXZhtz9IDPMT0K56Xr-Lxp3Q7qmT2rslRKsIFzv737CoUZOiQEViz2ors-xgg=s4800-w1284"
+      ]
+};
+    const extraPhoto = {
+      fortChambly: [
+        "https://lh3.googleusercontent.com/places/ANXAkqEwSJgFg3GKTCjUpPB3__6tuEgNoe_BXZruL__bxFSuMiv_f7tb_svhB5tpoct5-fVilo4IEWZbK-azJPqIRMBflZEZSTzVjkE=s4800-w870-h290",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZM8vSkx4z50HaweKNsiRz8_Th-mnZKhJSpq3SCcrJAO3ApPhcmBppsdARLHyMGH09MOi2ggyaVs5WtS2sx0joyhj6h1zwSIIMvkMhsBzG_44HXe1Jh7lpjuiwAdT-nxGEbcibJbLsAFRYTWS-w=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZNwG4wlRAmd3-RZlH6sLPJV88d1Mc1MvHZcKzihFk6AXaqOb62UoFshe0BvBqd0VK3-n_YLhYX1LyqjwrNIWDbKS-TanEdVF63ihQ7wMzr4aE4jXzYxL3aeKM6GHRcQkcO6PpFce_Y9hlIkTQ=s4800-w2400-h1600"
+      ],
+      terrebonne: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZO5NsD5sOUBQLT_r_w0Guv14_N4cmxZTUGlbVjRzIcB7s5SOU444rNLx30NPQJTEqUSszhadZ9lkjuCiCs3MBeq2ULGnvUQxjIcBOBOcTKKn-shyEJc3puEVqrG7wLv2Q0G6qJfNLbzpgwd=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZOb3RTs8kbiusNdBzNnt49C-0bKhx2y73W-4CowchnD7KKS3B-hRJIRze6sm4icPg7_botA148fSEw2bH0ziPTRoLKUX58OTXwCs2MI29JYqDEYJMfwly3aJ5ZmPVQYWykfL7rEKHFr5dmHdg=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPFrqT9Aq26BQL9gKvpatWpeHnckN7RLiaB907rKZYsFNsccbwKsWyK7V--tHKrXJtjAABriU2rryCiQDWRuYJqdodaxQJSpAdukbgkdXwffdTHtdIpC0QzyxUqY7AGbBQfjZ3aIypFn_2O1A=s4800-w2400-h1600"
+      ],
+      milleIles: [
+        "https://lh3.googleusercontent.com/places/ANXAkqFXTc-xzdCdS6g6mg1ZL7qWxmfmvsadVPZmPrcD2H0YtQ11dWDyXQOhOsjf3Bk4d39Z7n7XqtGgtRKGnfS9jyd1Eh82JZ8XNTg=s4800-w2400-h1439",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMT1DS_iyZ9syzMqAepu3jFDjbvfZEjFeIH0kwCBweemjL8_OtcXG07SPq2eiilrXeoO75lNSapYmPpDkyZg-OLcUx-zX3ITk5_rFNvkPTVYZ4DA2jkZtEy1cniqIAAaOMAujp0WVbrjAYlHA=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZOT6gMC7_pydumFw80jdUVlpugLcHI-0wbViRxtNQbKXlTox_VQUHOwDxps-hQc48nA72l5VDdyU2pXM2qNXXwTSpbzYUz1Hcps8RpPBaZPNLsZYOFEpyxdO4asxTgvOF2s8uP__ZXXI1PNGWo=s4800-w2400-h1600"
+      ],
+      lachinePaddle: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMT3Tqr3DulF5_yD2i6Ql6p50SNQM36Ky73LCvfPcm8Nyk522W9AqFex1EB_gSQZuND6s36lCzv2y-V8kizzXeJgrVx4ONmtVbhXk_aH9ShFc-CHaTzAkU4vo2AQ3-RXhz9FY_J0qUD7yG26Q=s4800-w800-h600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMV8yP3uavnbXiVOlx9nWTv9B-Hytrs668uAZkcVBqtgAnWMTXm2vTTFEmnnTdeVW_LRhTwootpXTGwHmfA6M5cvv5JV87LaqPHF2PJutWoYNYc3GGxuZ2fYqUeELlmbURsIcDfY7GM38-mqi2HcKeJMw=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZNRXK5z4lbnoHMonuHDapTQiaic8nYxO5kxei9zDI0QXI8XR10N7HGj2aGsUdWd9WNVys3-PX3QXFazsMYMwfWMfrXYLx7MCxRnxAMvv5fcduuNxaC9VARvRv_2A7HnmV-_dGaD2JbJH9_UvZRSxseYPA=s4800-w2400-h1600"
+      ],
+      bateau: [
+        "https://lh3.googleusercontent.com/places/ANXAkqH23bPWYT4HJC579pLU4H2Url02v8Xne4uLn90Rl8Khat9FnJwCyZHrQ-oUmMkK8qFWq6EbmAoEgH8TNIzXbQFjgOAvutQXneQ=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/places/ANXAkqFyNLcAkd4jtm_aNK1-PziORmoPgeTZwfLTmbR58-uR0uGZrQnrEgdzw1i8xi3bSmcMMKDcQRZX1-AnRQ28IiW9mi-CG5G0Eq4=s4800-w1200-h857",
+        "https://lh3.googleusercontent.com/places/ANXAkqHiDw_tpV03n5ci_keJeCe03Y-TD5OTIF_Ypag2EtTLckTrKxlQtSOjZTTpzPUQlsHKJ6K31I13mpPrqxe0riqthUFJZ_3P3g0=s4800-w2400-h1600"
+      ],
+      longueuil: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZM19Mv7de6-MFrnKfhFmD_F_Ci1DmhyUA6FQv67mamXDUIUXj2FEmvoo9d_vd2-3yT98AzMpkJDVlWtxZBbB_7zXKeZwZMfQtgiXUQPblilwdB9kYApWJ9V1KdfRapWyw615ikOz1PEroPf=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPDZHBmhxL673fYnFwTXqKqDJNqDY8T9bQPMnkRnfzuV_BO2os_U7GunTu3JUb3kt3COM-unkqPaNsgYKDszoeXXNUqnc_hncDRBHLWzZ8WBrZtzNVcl3uFxuy9g3n2oOTSZ2Y44QlltMvxEeyoJqPD=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZOihRlDZdikIOE3gTeoo1robHnJUKlMvwKhw20veuEunXtdubCIu-ZsMNvnskQcQmVwwrNCbOl0wocVGiL1jHomtbeA9qSzs4l3zqdwFjE9PaY2eUCMot1uGG6bdqHXEQWiLZzxWqaX407Jugw=s4800-w2400-h1600"
+      ]
+    };
+
+    const sections = [
+      {
+        title: "Historic Port + Architecture",
+        label: "Strongest lens: old city / port / stone streets",
+        hero: photo.old[0],
+        lenses: ["Old Montreal makes the founding and port economy visible fast.", "Notre-Dame and Place d'Armes give the biggest architectural payoff.", "Pointe-a-Calliere is the best context stop if weather turns."],
+        places: [
+          { name: "Old Montreal", pitch: "Cobblestones, plazas, the old port, and the easiest first read on historic Montreal.", pics: photo.old, map: "Old Montreal Quebec" },
+          { name: "Notre-Dame Basilica", pitch: "The dramatic church interior: blue light, carved wood, stained glass, and a true wow-stop.", pics: photo.basilica, map: "Notre-Dame Basilica of Montreal" },
+          { name: "Old Port of Montreal", pitch: "Riverfront air, open views, seasonal activities, and room to wander without committing to a long route.", pics: photo.port, map: "Old Port of Montreal" },
+          { name: "Pointe-a-Calliere Museum", pitch: "The city-history museum that makes Old Montreal make sense, built around archaeology and the original settlement.", pics: photo.pointe, map: "Pointe-a-Calliere Museum Montreal" }
+        ]
+      },
+      {
+        title: "Food Neighborhoods + Everyday Montreal",
+        label: "Strongest lens: food as civic culture",
+        hero: photo.market[0],
+        lenses: ["Markets, bakeries, and delis are not side quests here; they explain the city.", "Plateau and Mile End show residential form, stairs, murals, students, and cafes.", "This is the best low-stress theme for short walks and snacks."],
+        places: [
+          { name: "Plateau Mont-Royal", pitch: "Colorful row houses, murals, cafes, stairs, boutiques, and the everyday style of Montreal.", pics: photo.plateau, map: "Plateau Mont-Royal Montreal" },
+          { name: "Mile End", pitch: "Bagels, bakeries, small shops, creative energy, and the food-walk version of Montreal.", pics: photo.mile, map: "Mile End Montreal" },
+          { name: "Montreal Bagels: St-Viateur / Fairmount", pitch: "A fast, iconic, low-commitment food stop that still feels unmistakably local.", pics: photo.bagel, map: "St-Viateur Bagel Montreal" },
+          { name: "Schwartz's Deli", pitch: "Smoked meat as civic ritual: famous counter energy, salty sandwiches, and a real Montreal institution.", pics: photo.schwartz, map: "Schwartz's Deli Montreal" },
+          { name: "Jean-Talon Market + Little Italy", pitch: "Produce, bakeries, espresso, snacks, lunch stalls, and a lively local food economy.", pics: photo.market, map: "Jean-Talon Market Montreal" }
+        ]
+      },
+      {
+        title: "Mountain, Churches, Views",
+        label: "Strongest lens: topography + Catholic architecture",
+        hero: photo.oratory[0],
+        lenses: ["Mount Royal explains the city's shape.", "Saint Joseph's Oratory is the major religious-architecture stop.", "Use viewpoints and terraces as family-friendly pauses."],
+        places: [
+          { name: "Saint Joseph's Oratory", pitch: "The church on the mountain: huge dome, terraces, votive chapel, gardens, and city views.", pics: photo.oratory, map: "Saint Joseph's Oratory of Mount Royal Montreal" },
+          { name: "Mount Royal + Kondiaronk Belvedere", pitch: "The classic overlook: skyline, mountain park, and the geography that organizes the city.", pics: photo.mount, map: "Kondiaronk Belvedere Montreal" }
+        ]
+      },
+      {
+        title: "Water + Active Options",
+        label: "Strongest lens: river/canal geography",
+        hero: extraPhoto.milleIles[0],
+        lenses: ["Mille-Iles is the best active paddle near Montreal.", "Lachine Canal has the easiest urban paddling logistics.", "A river cruise is the family-comfort version of getting on the St. Lawrence."],
+        places: [
+          { name: "Mille-Iles Paddling + Sainte-Rose", pitch: "Calm river islands, wildlife refuge context, rentals, and an easy link to old Sainte-Rose.", pics: extraPhoto.milleIles, map: "Parc de la Riviere-des-Mille-Iles Laval" },
+          { name: "Lachine Canal Paddling", pitch: "The easiest city paddle: canal water, rental logistics, industrial history, and Atwater Market nearby.", pics: extraPhoto.lachinePaddle, map: "Lachine Canal Aventures H2O Montreal" },
+          { name: "Old Port River Cruise", pitch: "The no-effort St. Lawrence option: comfortable, view-focused, and easy to pair with Old Montreal.", pics: extraPhoto.bateau, map: "Bateau-Mouche Old Port Montreal" }
+        ]
+      },
+      {
+        title: "Car-Enabled Side Reads",
+        label: "Strongest lens: greater-Montreal context",
+        hero: extraPhoto.fortChambly[1],
+        lenses: ["Chambly adds New France, military history, and the Richelieu River.", "Terrebonne is a compact old-town river outing.", "Longueuil is more local context than destination, but the co-cathedral is the South Shore highlight."],
+        places: [
+          { name: "Fort Chambly + Richelieu River", pitch: "A strong car add: stone fort, waterway history, river scenery, and an easy picnic/walk setting.", pics: extraPhoto.fortChambly, map: "Fort Chambly Quebec" },
+          { name: "Vieux-Terrebonne + Ile-des-Moulins", pitch: "Old streets, riverfront, mills, terraces, restaurants, and compact walking without a full rural day trip.", pics: extraPhoto.terrebonne, map: "Vieux Terrebonne Ile des Moulins" },
+          { name: "Old Longueuil + Co-Cathedral", pitch: "The worthwhile South Shore curiosity: old-town fabric plus a major religious/heritage building.", pics: extraPhoto.longueuil, map: "Old Longueuil Co-Cathedral Saint-Antoine-de-Padoue" }
+        ]
+      },
+      {
+        title: "Institutions, Shows, Hockey",
+        label: "Strongest lens: modern city economy",
+        hero: photo.arts[0],
+        lenses: ["Place des Arts and Quartier des Spectacles show the performance economy.", "McGill gives the university/research layer.", "Bell Centre is the visible hockey/event anchor downtown."],
+        places: [
+          { name: "Arts, Universities, and Sports", pitch: "Place des Arts, McGill, and Bell Centre show Montreal as a city of shows, research, and hockey.", pics: [photo.arts[0], photo.mcgill[0], photo.bell[0]], map: "Place des Arts Montreal" }
+        ]
+      }
+    ];
+
+    const slides = document.getElementById("slides");
+    slides.insertAdjacentHTML("beforeend", `
+      <section>
+        <div class="title-slide" style="--hero: url('${photo.old[0]}')">
+          <div class="title-copy">
+            <div class="deck-label">French Canada family trip</div>
+            <h1>Montreal</h1>
+            <p class="sub">A themed read of the city: historic port, food neighborhoods, mountain churches, water, side trips, and institutions.</p>
+          </div>
+        </div>
+      </section>`);
+
+    sections.forEach(section => {
+      slides.insertAdjacentHTML("beforeend", `
+        <section>
+          <div class="theme-slide" style="--hero: url('${section.hero}')">
+            <div class="theme-copy">
+              <div class="deck-label">${section.label}</div>
+              <h1>${section.title}</h1>
+              <div class="theme-grid">
+                ${section.lenses.map(lens => `<div class="lens"><strong>Why it matters</strong><br>${lens}</div>`).join("")}
+              </div>
+            </div>
+          </div>
+        </section>`);
+
+      section.places.forEach(place => {
+        slides.insertAdjacentHTML("beforeend", `
+          <section>
+            <div class="place-slide">
+              <div class="photo-stack">
+                ${place.pics.map(src => `<img src="${src}" alt="${place.name}" loading="lazy">`).join("")}
+              </div>
+              <div class="text-panel">
+                <h2>${place.name}</h2>
+                <p class="pitch">${place.pitch}</p>
+              </div>
+            </div>
+          </section>`);
+      });
+    });
+
+    slides.insertAdjacentHTML("beforeend", `
+      <section>
+        <h2>Best Shape For Montreal</h2>
+        <div class="summary">
+          <div><h3>Highest Yield</h3><p>Old Montreal + Notre-Dame, then Plateau/Mile End or Jean-Talon depending on appetite and weather.</p></div>
+          <div><h3>Best Water Choice</h3><p>Mille-Iles for active paddling; Lachine Canal for easiest logistics; Old Port cruise for comfort.</p></div>
+          <div><h3>Best Car Adds</h3><p>Fort Chambly and Vieux-Terrebonne add the most beyond the city without turning the day into a long drive.</p></div>
+          <div><h3>Evening</h3><p>Check Place des Arts, Quartier des Spectacles, MTELUS, jazz clubs, or comedy once dates are locked.</p></div>
+        </div>
+      </section>`);
+
+    Reveal.initialize({ hash: true, slideNumber: "c/t", transition: "fade", backgroundTransition: "fade" });
+  </script>
+</body>
+</html>
+_

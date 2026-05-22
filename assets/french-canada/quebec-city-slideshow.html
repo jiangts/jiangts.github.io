@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quebec City Trip Slideshow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+  <style>
+    :root {
+      --ink: #f7f2e8;
+      --muted: #c9d3d6;
+      --line: rgba(255,255,255,.18);
+      --accent: #e7b24f;
+      --blue: #5db8d7;
+      --green: #8ec56a;
+      --red: #e36f5c;
+    }
+    body { background: #101417; }
+    .reveal { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); }
+    .reveal .slides { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 { letter-spacing: 0; text-transform: none; line-height: 1.02; }
+    .reveal h1 { font-size: 1.75em; max-width: 900px; }
+    .reveal h2 { font-size: .64em; margin: 0; }
+    .reveal p, .reveal li { font-size: .36em; line-height: 1.35; }
+    .title-slide {
+      min-height: 72vh;
+      display: grid;
+      align-content: end;
+      padding: 0 5vw 5vh;
+      background: var(--hero) center / cover;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .title-slide .deck-label { color: var(--accent); font-weight: 800; font-size: .3em; text-transform: uppercase; letter-spacing: .12em; }
+    .title-slide .sub { max-width: 760px; color: var(--muted); }
+    .title-copy {
+      width: fit-content;
+      max-width: 860px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.38);
+    }
+    .place-slide {
+      position: relative;
+      min-height: 72vh;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #151b1f;
+    }
+    .photo-stack {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1.35fr .8fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 6px;
+    }
+    .photo-stack img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #263036;
+      filter: saturate(1.05) contrast(1.02);
+    }
+    .photo-stack img:first-child { grid-row: 1 / -1; }
+    .text-panel {
+      position: absolute;
+      left: 34px;
+      bottom: 34px;
+      z-index: 2;
+      display: grid;
+      align-content: end;
+      width: min(48%, 520px);
+      padding: 9px 11px;
+      background: rgba(0,0,0,.36);
+      border-radius: 8px;
+    }
+    .pitch {
+      margin: 0;
+      max-width: 500px;
+      color: var(--ink);
+      font-size: .43em;
+      font-weight: 750;
+      line-height: 1.18;
+    }
+    .text-panel .pitch { margin-top: 9px; }
+    .theme-slide {
+      min-height: 72vh;
+      display: grid;
+      align-content: end;
+      padding: 0 5vw 5vh;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--hero) center / cover;
+    }
+    .theme-slide .deck-label {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: .3em;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+    .theme-slide .theme-copy {
+      width: min(860px, 86vw);
+      padding: 7px 9px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.34);
+    }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+      max-width: 900px;
+    }
+    .lens {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      color: var(--muted);
+      font-size: .32em;
+      line-height: 1.28;
+    }
+    .lens strong { color: var(--ink); }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 26px;
+    }
+    .summary div { border-top: 1px solid var(--line); padding-top: 15px; }
+    @media (max-width: 820px) {
+      .place-slide { min-height: 76vh; }
+      .photo-stack { grid-template-columns: 1fr; opacity: .78; }
+      .photo-stack img:first-child { grid-row: auto; }
+      .photo-stack img:nth-child(n+2) { display: none; }
+      .text-panel {
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+        width: auto;
+        padding: 8px 10px;
+      }
+      .theme-grid { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides" id="slides"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    const photo = {
+      "old": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOgj_GFLMTaTSEH3TvL0r9VXParrZgovyhXCUlzgl6Hogv9JxcGuZcZiX32gVO9PiQMjdd0c9zeCwl7dY0N0FgUWyfihLWBfPJLNV0ftzDjmZYDDvgXnCwauOC7BhsBHKdCORYxja1TPOTqGIY=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOVb61GUPMLGjmQcnjHKGf5u7kfVDeIkdERb2ht1Mmz8FHrk10DMn6veCBvh2j0MVYtjHrD26sDw_GCgvwUwB_62H2nUWZpj1hrGwxBRwujdIZJ9MkW7Myr53dA4ZTh_QMuuICmHa6jRk70ezY=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOCGU9Xb7WnKxpOduT-zndSItPuycU5xGnbtINGqoi-Q0k8yY9OB0ptdd22V5-0LMgDQmzdEN7-nnlyH3v0wFI5A7_dH_PRmWfrPgR-OvOUqgDK3t_VtKg7BNZb9RDUCSmcW1QhRgxl10FR2w=s4800-w1600"
+      ],
+      "frontenac": [
+            "https://lh3.googleusercontent.com/places/ANXAkqGDW6_Xrtf6sQR7HhoLsBUtih9sK1JbiSoSxbt5o575OSpyIiVe03HbWx2qhbE4d5nElWUeInBjt4RctxeefRqGMiHPS5StHmw=s4800-w1600",
+            "https://lh3.googleusercontent.com/places/ANXAkqF_BFbEESsM_6fpNuAhDtXw4x3Yo0SPrRilZ7lQ2cH-FJvwhPVC5iCL4DjXj4wzZWwB3Dswuam-Oapdi3x82gU4cHdMk1kjS7Y=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPfi4hpGkwjUBaRBBYKoon5GbtPcrxQbL5ufCyniy2aAtFLhb9-iIsc7LI8sfHWlxVHac6Jru8PiNhEAt9Wwja_tu-V-zNWNFFS_H2iM-QATbJmILDqcH7HJfV69qYgFMRzKQi-TRAW6r5MrPg=s4800-w1600"
+      ],
+      "dufferin": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMJ1IXUEzionNsDIkQ7wt8xOFBm3mF0XXRiKRtTyi-vIALRf9_jzjseoSSO90nIi46-6oz9lvNuit__0h6pGRPxxjz-lPI--fAUGVV9rm5gdnO0gEutWx-YC0MX5EwrwqlhaV5N8uZ58dZHrg=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPmSfTo4hxg9Taat1cEWbzKeN4O-b7NOEHxgMBPc8aEKcr2SywAnzGxwoNVqBtIMFA-4ZdimGuLZBq40YQ2_-rx0QeWmAyrk4VkpbfBBG611XNaRAckwFF-RrRNZpG8WBZQJNGrM3gxxZiQcKBx00SS5w=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNprIi1A_2VD77s5TAtZybwKwgtlMZlW9GocEcjqRgk9YxqEtWkZ4_Lfyln3QjxUTuiUOPS4aCPdp49N7iLQb5sHsmReDtdOoNrRCMVMuEJsuPHE5ITKbmq69F4ZkrnTh1G_tecy6Mt1JOa9A=s4800-w1600"
+      ],
+      "walls": [
+            "https://lh3.googleusercontent.com/places/ANXAkqGB5i1lfvDVySv8CATrP4hhSS50Xkpknw37uf3l0dtvAHqOMMu4B-tXwhgOplcUilNBqbbNOBkW2xp7olan4xV7CUpNHa0gD98=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNjjBqRdODSc7ZVjouClG7aZJmAEod3IXBCQb250dQeKUg6k3hqfZwzAwi4JvnVoRUVnxXTFmoo-H35sKbrXnNPmjBWrWdbJdvoo90J2ohy6KvfYVRSsrBTTVBAO-cCynL8oTQTDUeZYqdE8pHmVz8A=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNooL-B5iFkoRDedS8bL8DN1VVOKVEcjdw4w7IoIbmkXp38DU9Gfrxq1ikp1DQ25t9mcnZu5ImIPKYOwBTuXTDwRtHIVrR4HSyWq1gylRM-xWILDen8_etEUHqLn-4KtpveyiAhy7RNlT2gLa4IvQ_4Tg=s4800-w1600"
+      ],
+      "parliament": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMUxPy5vIyT5t0zlHIoFMOmY5i4jDsmG5Dds0admknpSSJ1rej4TO3KzOKAgPRmMgmj1mlzqgsGq8RRYqPQNHFe2eUE-9r8P2hiZYY1H4L5Mk1iadyj6dMYz6r6mI-LO1X1ZKlFJYh-4FVHOHM=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMtgxzRppjaJ17Jm0fwyvRUsC74vtjj3Dts4CiQFwADe_AjQBYrWbtMWXojg8qagJ1vYwOzfbBxFwbIAhFhc-UE8rClbV8fnr9wJOiatYTC5Q45Qv9XDbhU-Fz7nJkektNh_F0cJ6X1ZXj1M_0=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPwVqwdfMK5ij9Kk0sCtpLt1u3Zjna8reKzzpmFjP-W-Eavt1dAFOBvGLBg6O399A7tmpHunxeKvic_xdjEFIKUj03NQMLuS_Cf0bJYuvuoiCqoS3enkN2xDOgAlJT7cRW-YRObqF0ymDskrw=s4800-w1600"
+      ],
+      "champlain": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPmXQqyYWRZQBgsFgsT40VKfJxH81o6694terQEauxGk7qwtCLgmyxvlRCaCgyVqMLUUcSG-m0R7gqNxpLASTBhLjU_jpANXnM-eL9DVY99CDis0gMk9lGqSh-gZ8raOSp42CV7aa9U_Lcjpw=s4800-w1600",
+            "https://lh3.googleusercontent.com/places/ANXAkqGqpUAxNxnNsN-xlu_gCStmHnIqm3dsR7Fy6U_a3kbpxkMUj8WZC6bKbuKogbllG5d6sqFm8xVd1_FoBUiTH4Z5I0FRnH7NWxs=s4800-w960",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPwbFmUKD2WgYzv5vFx21sWeXQ5Esy5C0Psk5AvRYxT8EedjC05vfQRSF_4xtKznewmUn4HlEGJME5cRdaFlQoul-KXazvQrOXVI9owTxZielaTyOph4jVmUuWR5fsmH3GSRq5dyMOb8ViJpQ=s4800-w1600"
+      ],
+      "royale": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNmeACur1GSesBjP1GF_w4EsNrP-IPdpdD0__Qd55RWB7zzNSFnIEfRJ-y3pLzRDazvEMA1pMpVML6Y9HLvOKpyTgO-Lh5brIDay7TmgtOChghJOUeTMpIWUS7doZJeo-LFoBHowofuiiQODg=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPTxYMTESJeCE3Pj186Na5-IwZTb1t62KYgosbzZ-8F1K9hYTmjd0vJucReYjBT30nbP3_Zbz76Du1HYEqBlESyyf7ry66DetLDxSUNx0v8MathhCwACTL1TVruXCg1mOHEjxS7Pvdx8LHBINo=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMJJRwcixy0rQ2CJWLt-63eY5ocssOv8fvK9Pu8kG5wZxg1KHB7kSZvn61-YoAp0WPZsKoQ1v3KgVzZW27DpIUhSERFB_laTZ_ui-Lq3V8Y-FlrE-mrffARJBUUqOTiCgretDB5QK7JbnVlr-U=s4800-w736"
+      ],
+      "cathedral": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMa1rBm-_vCDPQmgJSFpQJiP70TZcn-z18E3KV296y_pLOy6HDdviFGaWM16KIjnfBMVL46RB2J1OJ-qT-ltc23vqv4-nWev6pFK_J4kNs1uwGu_DVyOIU_LEi-AtnsYEEIqZhlUoWg5GrJT83w4dKl=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZObMShqPn5wqAhgTct77ByhGTrE7Q8UhlDcMY-5ob0j6kPa66xeJTZEXjuToo-QUMMnpuGvPXfSCPLVlWE4uuYTdh4mJoCXRtFd0ObjWnVEdDNevkEylDMn48jOw9zhEi03G2h7DzjGaPZZZw=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOyqFjHTOL0BkPDq9I3qy8MCI3LzClg3zdCl-ttaZTNLnLQh5220k1saJsBPEsIJHRd0gCppGjAfcNxS_XHE6sS75tgYaCDhCz8y7FFR7cPbqww93a2ejF3fJx98-mM0l2D7TTq7Wg7y7d5N_Q=s4800-w1600"
+      ],
+      "anne": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZOGpW5FnM57WtIYvGbhJkBNLMt05beqmcAAmQMuG590QAoqoTLLiVjN9lHFShfQBrgFDPEuNnA5PN2dvAjXLWB3BTeWXX3isJSrZZZQrWmWEqPZJZHpQ9AGnPjhL99QLuQdG-dvMrhb-yBbHw=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNJ-b1SkxwzxqyJK2kH11taaH7BGiXcFamoRSAdk7wQCdrYFshf0d6Gg_AZn6IXdCLgvpY2Zwc2yzZw0GxBgd8s6u5JEQR2MuWdgwkDH-yPlav7HfQAe7KRJM8DJfnsxTgOtCU5W2U9uwD6kA=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMiYKanpQY6wbdQaZzDYjfdlzm6In_h6na01L5pyTkqXWtvp5gploY8kC4Tu2KbYlJj5bgT3kStw7htT-HPyrEsOG3545Z_UsaU1396tLM3axMHh4ZxZ4L9DI_LkZya-F4Qn02Ve-v8Hydv6T2YsYS6Dw=s4800-w1600"
+      ],
+      "falls": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNzT1PVTtzrgjlqlJJAi2-J6mwZhazHZP1w_VNJCMukN0szbP2VtlB30vxY6Y7aI-0D03RNfe5GyCsPDLOC8TfhuUzjv4CwBt_N7agjuvzTM4t3iUiR2VVsgxkw9S-xsz8rnYcISOrV2-426g=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNcwqZ7yNvosAf3z40byyuUIdMmqMgbXivJQeH_1KgquRJWAM_N-ty-QPk60DCA1o4vhpvZggqL8Uu3cfT4KwFfhblyd89uVc02ZNomFZrF8-qmocx2WxG5DD7-R4XAvHBUfBuJlLuOsISh3g=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZMMkGVnmAeUdxeIcpc8Q_uv4JGpqBX_7s7sHC2sBugQeSAFyyse9r2p6oGJJB9_FTxvpQGxHMtiXBd9atoLWZVwK5dxh9JuWAXpLvVU2_w_k37ecCyNsOQttXglYLOl6bFmVITzitk4cBWk3VFBUvNmoA=s4800-w1600"
+      ],
+      "island": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZM7SRYFroLTQMCwJMVfbkREq3lMYDv72m9qJkDEIKqk6G5gegWogB3U_7kH6pCYqf3tIvNuK5exnUfr-1lF1UTQO9N6nrZ1qxjju7SFjfI8Ms3Rf4if_1iZF8JeBBxe2537KP56PEL189ObyA=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPdX9IfoQkvzG37r5nVqRt6RBgpKTQ4bjbSiFE3oObHbO_61EGuxrv1d4yvWW2aG2PqGXH82R0fwbnXH1px-UWK3IIhWOewoQEGXYnKs7z4zTND-mIX-Mln6U3bLQ8y9S5qgFhDqHkz2Al1Cw=s4800-w1575",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZNb5y4Hp1mEW9uiXR7ltIoUG8M_MC9-HEUy-gemXanHRFPEIXEjwiET8gEEpNMFSYXLbZL64czZuv4nvG_kw95azuS2vILCAd4r8ug9iRyqlSyyb1pSqZ7I7ISGyykN5xG-UoUpab58pbcMNg=s4800-w1600"
+      ],
+      "museum": [
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPckwmV4kzP0ZbquWoG0VgSiu0UNMDqMBOZWScPvSPEddgUHwwziePENcMI1BVrxqlXb3gDYbtgbvGDmsVtXnholn3OPugjf4i5VqB0q9NZBz8M7RSHEe38GfpAlh1AGxmxTyPCbq7LuycBsB8=s4800-w1440",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPeqP70Ah4WXGVWXfb_HFAHiQN1635VA3ky9TSNYg-0SGgra7FRH_eWXV1tHlO8s8Sm6Lfa4BTgQ10iL-uWkPTPL5Sw_-ddzKkpBPy_rpkDEe1OZldNzavTZEih2l3bDhD8XXFGMhWt1C2pRQ=s4800-w1600",
+            "https://lh3.googleusercontent.com/place-photos/AJRVUZPHkixTRCGZY4vDWrAxyI8vCPKKxBYhNxhAa2F43Hp83j8-jSnuRxFu3m-kd9Up0IGGLCbm1NOWG8CunG1Cjh9-WugmYDbdIrk_gcKcVcbefHidilNEKJgZq-NcZup_i_vXJo1hY1HqlNbm_Q=s4800-w1600"
+      ]
+};
+    const extraPhoto = {
+      chauveau: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPy_LIp9w5nPl-ZYmmY4wUfC6o5Zxec5NWmUqQyylJ_jq-BEEGQ9X5cnGPK9fHL0coNoenlHI0uKw9neXlVUrkSgm2eXLQxgMB1M98UyxE4CF80Fk-hsGVF334Pj-T_eD3WN2LxJjM2K5mKRA=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPdf6uGlN39JqWiO16ex_BxFX1w2AVc1GBTLqYZwVgm3DRQZvuOJF4RgeqZG4KoBef0lur19MT8_kCcotD8oA7-Cil2pyXaZvIEQ50SuYSgq1XM7T3O_X4kFXah3C26UAI7NzobOe-kNJGvZA=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPFi2e1aRxRo7nC-yWBNEJfAE2dR-WFCAKa3_SJyb1jE46-kmTYZ98ijAfjMEQYvKGeESF7i1_9d_GYqXG4zjy9gcaxmDbX0lAlmzDwj6UhXNokH5fhtaOjXp4EEAdcT_jiPT-Hkpe8sfX__a8=s4800-w2400-h1600"
+      ],
+      canots: [
+        "https://lh3.googleusercontent.com/places/ANXAkqFsclVldHV6n5EyaObtbw7fs4QMx6nR6jexOo_1S9U-kJN7PCdOp98vMvSXXdeAEgrVucch1ReQxrbnRZKUtwvIkdamzMFxmcM=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPuzh58AI3MqiLRYUEqeHMpaZDAWH-o_Pt2TJfbCepqinJorm3ylk0XrYnOO1T37T0c1ytpaF7v_Aevw2SnvNghPGiJarexJINm7vLVzOZ-nfcmXmHsApcNtCcIW_vac6DqqnHn5Ax3OIICzyyegedGUg=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMeXno5svq90T0OToudC5h-RTNhLYn6YZMKWe20Fes4vBl_x5gmDbj84S9ugqnU-9Nvdl51npkNwVXZf5lt_KMxRH4s0tyvjBEQzzMXH5AKBHjpdgryu-ohC8-Gb4JFVW7VaekHmPW_-BkCWldCevwMEQ=s4800-w2400-h1600"
+      ],
+      jacques: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMV9XPyWaDe9iFh9w2k4yPXMoC6NbAN-fOJFPQq_IQRMDRP21ro_mYXn-mr7Cpq5k5P-Cj9-RisC3B_NcI-e1wP7UTNKN8llojJ2jNuU6MNpTgAF9hDwZhjDf1oTrFLnA1pa9OeQg1KYScf9w=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMOPoYLIaqXpZr8hkK3WfDTZk__iFqzTDEeugx0HCKBPbsET5KX5JSAZkoj2CssNmkrwh-ynLvvzhwQH30xfZV0WGqtpDUn4z0BkaaG4Ixb8xQ_FR3h17z63sgfaXek9F3k-LSTgZdkdl7y4A=s4800-w1440-h1084",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPadPxDsCHg-2ntsEHIBcKma6dgTxFVX4gkyVDK4OlFXtrTBmtQP0NFaX6tQnZQrAO4ORNDj8ndAq4p54Lvrgn1HE9EFYtRxbO49WB6Yu54Z2IPhEBaqSx9VfW2tAuEKOdzSoy7EArbTEgR=s4800-w800-h600"
+      ],
+      ferry: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMhYAPbkJWJxknIdfYcGvUpdwVkDnTNCfGGcXPzzlQEeIMBz2JbDJqb0YE_YSy0Fm1B-LxasfjUCOCdFAyzdPaWLghptuYNc5CdsVWR51BhWK6PkoluTZkkOB_0Z-hqcAeSLgXnvVr0R9jZug=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZOGei6BvO4C83ddnZgdHLL8ZaaY8Qb3g-RcABBSXBeNISqlJsxL81kZTEqtoTiZ7qSUCcBn_DERUlVRqz6aI1BaODXrF5aAfeusObig6Qoi7JU8N_ybGnRU1Sk2e21O4vNZpcKQ_bqnNQGzaQ=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZNcXJIxuomGwGi57aSzO22TkRbQ5cyHkXkyAY11mSO2e5p1FJD0NyYtnNIRRJvQPGRjBDYpvPwy9HfS4vZeX-Tg2CuI09fakiLsshsiFBFdJVwUb8tpE60wf20O5G2V2pb9QyAAsszJnR--2Q0=s4800-w2400-h1600"
+      ],
+      canyon: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZOHUSrANOelrxN9gXvZ6C8Jl_GFzMuIJ0eqox69WWxIPpQTDdLmN3QPa_WLbFCQgOY2HIR4AOgC7ha9go3vvV6QZAK6fR_a1AckD1xoz5UXQF4tONFxf9BX5mNe9aOazk0Aof_Hy0ST4YYvsalnkeupRw=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/places/ANXAkqF8a6eZRxS2S21UBo-dYwmIRs5qokMlLxaVLl2SNnfI6X97k7g9L7ftLWXiWpbote-cwQy9XiisIfq1xmhQn59Neun2X2IhrXA=s4800-w720-h1080",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPZfA_6ePGgNnnsKG_YB563ofuEkkOik9uJefnPBoJRmlN0gz3Y4MBvKkcSSUVvMedgYIi2niSEZibb1VqDjrv9EeVdneQFiMacDi1WVUQk5sNsPa2a14tBfWxvZ1Xf5o7nf_uH9_W5hI56Wg=s4800-w2400-h1600"
+      ],
+      charlevoix: [
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZPXSNVpo6WkuG2C4fCZI4oo2UgZnTj0F4YfXLNiNoyvoy5rkUeoKPSqWQHkQHX75B6lbpWbWQF__M3KiCC7aYQJ94emXLeK3FT2z3y9cW2jhe3dDu-kTAZJvtVwMUjm4GZQ53UYHeuCTknDJg=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMWyWYtaxQ4nNSwDFh4jUP8CB2tpIQ-1oLsqzrkGtBn58Ly2xu_2m1Eiua3SUnDFdsyPXyByCd_wJJSqOwaZ1rg_oPz4HDo8OUENCmHGUWiGziafcGOeYucwbQRZs3aTTvbQoX_qfcwwJ6e=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZNa_Br435I3vUmRsJv8sWPfjtPeoW0iBitE4G0x6KAtG4qV58fTpnExvoMHzfkmd4qNWBRFdegXjKmmCtnuPKsFuazV63Y9fbA-1hJMl9Kt5Xf6jmHBTenWUUEbp7BXWrK8V0GjqWfTPQupZA=s4800-w2400-h1600"
+      ],
+      saintRoch: [
+        "https://lh3.googleusercontent.com/places/ANXAkqH3Y-Pbw_m_AwVWSIrd8GvOAzFnF80Un7zvOifkp9gmSo7oNRrDwcl41lhu8K3o0u40QnfygNUO80CU21sU6xSrFsCHE2CBH4k=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZMP-exiUPXSBpIttjkOLSz5M0ik96AYsMv8NghDC7Kwuz-eLXgN2xV0Zg_HZJjzR9hG61Cx9xskx4W6-OM-j9nJ_DXRSsUtYXtgIx-882rAhXT9Fd1RrjjWBgKvo4IM_NR2RJKZjqJfHC_Xch9a_5MSxw=s4800-w2400-h1600",
+        "https://lh3.googleusercontent.com/place-photos/AJRVUZM5FidRJ3suhN2MEkX7jA1meDhS_QXAcZ720Hk3g5f7nW0ginhblfX2ugQiDxtajkN97UdE-gdfn8ZlxHOFi9IhJq0juuNZG1_wCNHWoLYuKjeRxYbzl205xBbq3gNXSeeWY9MS2rSKKip0uK4=s4800-w915-h587"
+      ]
+    };
+
+    const sections = [
+      {
+        title: "Fortified Old City + Capital",
+        label: "Strongest lens: civic history / architecture",
+        hero: photo.frontenac[0],
+        lenses: ["Old Quebec, the walls, and Frontenac make the city legible quickly.", "Parliament adds the provincial-capital layer beyond tourism.", "This is the most compact high-yield walking theme."],
+        places: [
+          { name: "Old Quebec", pitch: "The postcard version of French Canada: walled streets, stone facades, cafes, and a compact UNESCO old town.", pics: photo.old, map: "Old Quebec Quebec City" },
+          { name: "Fairmont Le Chateau Frontenac", pitch: "The skyline icon: castle-like hotel, river drama, and the photo everyone expects from Quebec City.", pics: photo.frontenac, map: "Fairmont Le Chateau Frontenac Quebec City" },
+          { name: "Fortifications of Quebec", pitch: "City walls, gates, and military history that make Quebec feel unlike any other Canadian city.", pics: photo.walls, map: "Fortifications of Quebec National Historic Site" },
+          { name: "Parliament Building", pitch: "Quebec as a capital city: formal gardens, ceremonial architecture, and provincial identity.", pics: photo.parliament, map: "Parliament Building Quebec City" }
+        ]
+      },
+      {
+        title: "River, Topography, Lower Town",
+        label: "Strongest lens: St. Lawrence geography",
+        hero: photo.dufferin[0],
+        lenses: ["The terrace and ferry reveal why the city sits where it does.", "Upper Town / Lower Town is the core physical story.", "Petit Champlain and Place Royale give the best compact streetscape."],
+        places: [
+          { name: "Dufferin Terrace", pitch: "A broad boardwalk over the St. Lawrence: big views, easy pacing, and a natural place to pause.", pics: photo.dufferin, map: "Dufferin Terrace Quebec City" },
+          { name: "Quartier Petit Champlain", pitch: "The atmospheric shopping lane: cobblestones, boutiques, old facades, and evening glow.", pics: photo.champlain, map: "Quartier Petit Champlain Quebec City" },
+          { name: "Place Royale", pitch: "A small square with a big founding story: old stone, church heritage, and Lower Town texture.", pics: photo.royale, map: "Place Royale Quebec City" },
+          { name: "Quebec City Ferry / St. Lawrence", pitch: "The easiest way onto the river: skyline, cliffs, Frontenac, and city shape with almost no physical effort.", pics: extraPhoto.ferry, map: "Quebec City Levis ferry St Lawrence" }
+        ]
+      },
+      {
+        title: "Churches + Catholic Heritage",
+        label: "Strongest lens: religious architecture",
+        hero: photo.anne[0],
+        lenses: ["The family church theme is unusually strong here.", "Notre-Dame de Quebec fits the old-city walk.", "Sainte-Anne-de-Beaupre is the major pilgrimage destination outside town."],
+        places: [
+          { name: "Notre-Dame de Quebec Basilica-Cathedral", pitch: "A compact church stop in the historic core, useful if religious architecture is a family theme.", pics: photo.cathedral, map: "Notre-Dame de Quebec Basilica-Cathedral" },
+          { name: "Sainte-Anne-de-Beaupre Shrine", pitch: "Grand pilgrimage energy outside the city: basilica scale, Catholic history, and a destination church.", pics: photo.anne, map: "Sainte-Anne-de-Beaupre Shrine Quebec" }
+        ]
+      },
+      {
+        title: "Waterfalls, Parks, Paddling",
+        label: "Strongest lens: accessible nature",
+        hero: photo.falls[0],
+        lenses: ["Montmorency is the fastest dramatic nature payoff.", "Jacques-Cartier is the most scenic active option.", "Parc Chauveau and Canots Legare are easier local nature/water choices."],
+        places: [
+          { name: "Montmorency Falls Park", pitch: "Immediate nature payoff: a dramatic waterfall minutes from town, with viewpoints instead of a hike if desired.", pics: photo.falls, map: "Montmorency Falls Park Quebec" },
+          { name: "Canyon Sainte-Anne", pitch: "A car-enabled gorge stop that extends the waterfall day with bridges, rock, forest, and short-loop drama.", pics: extraPhoto.canyon, map: "Canyon Sainte-Anne Quebec" },
+          { name: "Jacques-Cartier National Park", pitch: "The big nature read near Quebec City: valley, river, paddling options, and more dramatic scenery than an urban park.", pics: extraPhoto.jacques, map: "Parc national de la Jacques-Cartier" },
+          { name: "Canots Legare / Saint-Charles River", pitch: "The easy city paddle: calm water, rentals, and active time without the logistics of a national park.", pics: extraPhoto.canots, map: "Canots Legare Quebec City" },
+          { name: "Parc Chauveau", pitch: "Local green-space read: the Saint-Charles River corridor, easy walking, and a lower-drama nature reset.", pics: extraPhoto.chauveau, map: "Parc Chauveau Quebec City" }
+        ]
+      },
+      {
+        title: "Island, Villages, Food Drives",
+        label: "Strongest lens: regional culture by car",
+        hero: photo.island[0],
+        lenses: ["Ile d'Orleans is the best car loop close to town.", "Cote-de-Beaupre bundles falls, church, and gorge into one regional outing.", "Charlevoix is the bigger spare-day version: river, mountains, arts, and villages."],
+        places: [
+          { name: "Ile d'Orleans", pitch: "A countryside loop of villages, river views, chocolate, cider, bakeries, and farm stops.", pics: photo.island, map: "Ile d'Orleans Quebec" },
+          { name: "Charlevoix / Baie-Saint-Paul", pitch: "The expansive regional read: St. Lawrence scenery, mountains, arts-town character, food, churches, and villages.", pics: extraPhoto.charlevoix, map: "Baie-Saint-Paul Charlevoix Quebec" }
+        ]
+      },
+      {
+        title: "Local Life + Weather Tools",
+        label: "Strongest lens: useful pauses",
+        hero: photo.museum[0],
+        lenses: ["Musee de la civilisation gives an indoor culture reset.", "Saint-Roch is the better local-food / redevelopment read.", "These are useful when Old Quebec gets crowded or knees need a break."],
+        places: [
+          { name: "Musee de la civilisation", pitch: "A smart culture pause near the old port when weather, fatigue, or curiosity calls for an indoor reset.", pics: photo.museum, map: "Musee de la civilisation Quebec City" },
+          { name: "Saint-Roch", pitch: "A more local urban layer: restaurants, cafes, redevelopment, and everyday Quebec City beyond the postcard core.", pics: extraPhoto.saintRoch, map: "Saint-Roch Quebec City restaurants" }
+        ]
+      }
+    ];
+
+    const slides = document.getElementById("slides");
+    slides.insertAdjacentHTML("beforeend", `
+      <section>
+        <div class="title-slide" style="--hero: url('${photo.frontenac[0]}')">
+          <div class="title-copy">
+            <div class="deck-label">French Canada family trip</div>
+            <h1>Quebec City</h1>
+            <p class="sub">A themed read of the city: fortified core, river topography, Catholic heritage, nature, regional drives, and local reset options.</p>
+          </div>
+        </div>
+      </section>`);
+
+    sections.forEach(section => {
+      slides.insertAdjacentHTML("beforeend", `
+        <section>
+          <div class="theme-slide" style="--hero: url('${section.hero}')">
+            <div class="theme-copy">
+              <div class="deck-label">${section.label}</div>
+              <h1>${section.title}</h1>
+              <div class="theme-grid">
+                ${section.lenses.map(lens => `<div class="lens"><strong>Why it matters</strong><br>${lens}</div>`).join("")}
+              </div>
+            </div>
+          </div>
+        </section>`);
+
+      section.places.forEach(place => {
+        slides.insertAdjacentHTML("beforeend", `
+          <section>
+            <div class="place-slide">
+              <div class="photo-stack">
+                ${place.pics.map(src => `<img src="${src}" alt="${place.name}" loading="lazy">`).join("")}
+              </div>
+              <div class="text-panel">
+                <h2>${place.name}</h2>
+                <p class="pitch">${place.pitch}</p>
+              </div>
+            </div>
+          </section>`);
+      });
+    });
+
+    slides.insertAdjacentHTML("beforeend", `
+      <section>
+        <h2>Best Shape For Quebec City</h2>
+        <div class="summary">
+          <div><h3>Highest Yield</h3><p>Old Quebec, Frontenac, Dufferin Terrace, Petit Champlain, and Place Royale as one compact core.</p></div>
+          <div><h3>Best Car Day</h3><p>Montmorency Falls, Sainte-Anne-de-Beaupre, Canyon Sainte-Anne, then Ile d'Orleans if the group wants food and scenery.</p></div>
+          <div><h3>Best Water Choice</h3><p>Ferry for comfort and skyline; Canots Legare for easy paddling; Jacques-Cartier for the scenic active version.</p></div>
+          <div><h3>Rest Tools</h3><p>Use cafes, the funicular, taxis, Parc Chauveau, Saint-Roch, and the museum to avoid a forced-march old-town day.</p></div>
+        </div>
+      </section>`);
+
+    Reveal.initialize({ hash: true, slideNumber: "c/t", transition: "fade", backgroundTransition: "fade" });
+  </script>
+</body>
+</html>
